@@ -46,8 +46,10 @@ print(f"📅 TLE Data Baseline Epoch: {satellite.epoch.utc_jpl()}")
 # ==========================================
 # STEP 3: DEFINE THE PROPAGATION WINDOW
 # ==========================================
-start_time = datetime.now(timezone.utc)
-duration_hours = 240
+# start_time = datetime.now(timezone.utc)
+# duration_hours = 240
+start_time = datetime(2025, 6, 1, 0, 0, 0, tzinfo=timezone.utc)
+duration_hours = 120
 time_step_minutes = 1
 
 path_points = []
@@ -84,5 +86,5 @@ print("\n🌍 Generated Ground Track Path Preview:")
 print(df_path.head(10))
 
 # Note: Sent directly to your data/ directory to keep things organized!
-df_path.to_csv("data/propagated_satellite_path240.csv", index=False)
-print("\n💾 Path data exported cleanly to 'data/propagated_satellite_path240.csv'")
+df_path.to_csv("data/propagated_satellite_pathJune.csv", index=False)
+print("\n💾 Path data exported cleanly to 'data/propagated_satellite_pathJune.csv'")
