@@ -4,8 +4,10 @@ import pandas as pd
 from math import cos, radians
 
 # Paths
-INTERSECTION_CSV = r"D:\hdj\mda\data\satellite_ship_intersections.csv"
-OUTPUT_GEOJSON = r"D:\hdj\mda\data\ship_capture_frame.geojson"
+# INTERSECTION_CSV = r"D:\hdj\mda\data\satellite_ship_intersections.csv"
+# OUTPUT_GEOJSON = r"D:\hdj\mda\data\ship_capture_frame.geojson"
+INTERSECTION_CSV = r"D:\hdj\mda\data\satellite_ship_intersections_long.csv"
+OUTPUT_GEOJSON = r"D:\hdj\mda\data\ship_capture_frame_long.geojson"
 
 print("📖 Reading match results dynamically...")
 try:
