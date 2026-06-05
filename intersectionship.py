@@ -5,8 +5,8 @@ from tqdm import tqdm
 
 # Configuration
 SATELLITE_PATH = r"D:\hdj\mda\data\propagated_satellite_pathJune.csv"
-SHIP_PATH = r"D:\hdj\mda\data\isolated_target_ship.csv"
-OUTPUT_INTERSECTIONS = r"D:\hdj\mda\data\satellite_ship_intersections.csv"
+SHIP_PATH = r"D:\hdj\mda\data\longest_pathpoints.csv"
+OUTPUT_INTERSECTIONS = r"D:\hdj\mda\data\satellite_ship_intersections_long.csv"
 
 # Sentinel-2 has a 290 km total swath width. 
 # Looking straight down, it sweeps 145 km to the left and 145 km to the right.
