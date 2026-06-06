@@ -83,7 +83,7 @@ try:
                               str(real_scene["properties"].get("mgrs:latitude_band", "")) + \
                               str(real_scene["properties"].get("mgrs:grid_square", "")),
                     "cloud_cover_pct": real_scene["properties"].get("eo:cloud_cover", 0),
-                    "aws_match_status": "HISTORICALLY_VERIFIED"
+                    "aws_match_status": "HISTORICAL_SCENE_REFERENCE"
                 }
             }
             print(f"   • Real Tile Found: T{verified_feature['properties']['tile_id']}")
