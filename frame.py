@@ -29,16 +29,16 @@ except Exception as e:
     print(f"❌ Error reading intersection file: {e}")
     exit()
 
-print("\n📐 Calculating 100x100 km standard satellite imagery frame...")
+print("\n📐 Calculating 110x110 km standard satellite imagery frame...")
 
 # Degree approximations for a standard satellite tile grid footprint
 # 1 degree latitude = ~111.32 km
-lat_offset = 50.0 / 111.32  # 50km half-width up and down
+lat_offset = 55.0 / 111.32  # 55km half-width up and down
 
 # Longitude degree length shrinks as we move away from the equator
-lon_offset = 50.0 / (111.32 * cos(radians(match_lat))) # 50km half-width left and right
+lon_offset = 55.0 / (111.32 * cos(radians(match_lat))) # 55km half-width left and right
 
-# Define the 4 corners of our 100x100km square imagery scene
+# Define the 4 corners of our 110x110km square imagery scene
 min_lat = match_lat - lat_offset
 max_lat = match_lat + lat_offset
 min_lon = match_lon - lon_offset
@@ -62,7 +62,7 @@ feature_node = {
         "scene_id": "Simulated_Capture_Scene_Gulf",
         "simulated_utc": match_time_str,
         "calculated_center": f"{round(match_lat, 4)}, {round(match_lon, 4)}",
-        "swath_width": "100km x 100km standard tile"
+        "swath_width": "110km x 110km standard tile"
     }
 }
 
