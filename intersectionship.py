@@ -4,9 +4,10 @@ from geopy.distance import geodesic
 from tqdm import tqdm
 
 # Configuration
-SATELLITE_PATH = r"D:\hdj\mda\data\propagated_satellite_pathJune.csv"
-SHIP_PATH = r"D:\hdj\mda\data\longest_pathpoints.csv"
-OUTPUT_INTERSECTIONS = r"D:\hdj\mda\data\satellite_ship_intersections_long.csv"
+# SATELLITE_PATH = r"D:\hdj\mda\data\propagated_satellite_pathJune.csv"
+SATELLITE_PATH = r"D:\hdj\mda\data\propagated_satellite_2b.csv"
+SHIP_PATH = r"D:\hdj\mda\data\next_10_ships\rank5_pathpoints.csv"
+OUTPUT_INTERSECTIONS = r"D:\hdj\mda\data\intersections5_2b.csv"
 
 # Sentinel-2 has a 290 km total swath width. 
 # Looking straight down, it sweeps 145 km to the left and 145 km to the right.
@@ -76,3 +77,4 @@ if intersections:
 else:
     print("❌ No direct intersection found. The satellite didn't cross this ship during these 5 days.")
 print("=========================================================")
+
