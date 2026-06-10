@@ -6,8 +6,11 @@ from math import cos, radians
 # Paths
 # INTERSECTION_CSV = r"D:\hdj\mda\data\satellite_ship_intersections.csv"
 # OUTPUT_GEOJSON = r"D:\hdj\mda\data\ship_capture_frame.geojson"
-INTERSECTION_CSV = r"D:\hdj\mda\data\satellite_ship_intersections_long.csv"
-OUTPUT_GEOJSON = r"D:\hdj\mda\data\ship_capture_frame_long.geojson"
+# INTERSECTION_CSV = r"D:\hdj\mda\data\satellite_ship_intersections_long.csv"
+# INTERSECTION_CSV = r"D:\hdj\mda\data\satellite_ship_intersections_2b.csv"
+# OUTPUT_GEOJSON = r"D:\hdj\mda\data\ship_capture_frame_2b.geojson"
+INTERSECTION_CSV = r"D:\hdj\mda\data\intersections5_2b.csv"
+OUTPUT_GEOJSON = r"D:\hdj\mda\data\frame5_2b.geojson"
 
 print("📖 Reading match results dynamically...")
 try:
