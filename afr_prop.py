@@ -72,14 +72,13 @@ def propagate_tle_to_csv(
 
 
 
-tle1 = "1 56964U 23084AJ  26161.62044538  .00004039  00000-0  14830-3 0  9990"
-tle2 = "2 56964  97.6260 298.1542 0010550  10.4977 349.6480 15.28499881166228"
-
+tle1 = "1 56964U 23084AJ  26162.92974916  .00004104  00000-0  15059-3 0  9993"
+tle2 = "2 56964  97.6262 299.4946 0010424   5.9793 354.1569 15.28511195166421"
 start_time = datetime(2026, 6, 11, 0, 0, 0)
-end_time = datetime(2026, 6, 12, 0, 0, 0)
+end_time = datetime(2026, 6, 13, 0, 0, 0)
 step_seconds = 60
 
-csv_file = "data/orbit_track_final.csv"
+csv_file = "data/afr"
 
 propagate_tle_to_csv(
     tle_line1=tle1,
