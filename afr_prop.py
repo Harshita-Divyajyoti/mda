@@ -4,6 +4,57 @@ import pandas as pd
 from datetime import datetime, timedelta, timezone
 from sgp4.api import Satrec, jday, WGS84
 from tqdm import tqdm
+from datetime import datetime, timedelta, timezone
+
+# ==========================================
+# 0. TLE time to UTC conversion
+# ==========================================
+
+def tle_epoch_to_datetime(epoch_string):
+    """
+    Converts a TLE epoch string (e.g., "26161.62044538") into a UTC datetime object.
+    
+    Parameters:
+        epoch_string (str or float): The raw epoch value from line 1 of the TLE.
+    Returns:
+        datetime: A timezone-aware datetime object set to UTC.
+    """
+    # Ensure we are working with a clean string
+    epoch_str = str(epoch_string).strip()
+    
+    # Split the string at the decimal point to prevent float precision rounding errors
+    if '.' in epoch_str:
+        year_and_day, fraction_str = epoch_str.split('.')
+        fraction = float("0." + fraction_str)
+    else:
+        year_and_day = epoch_str
+        fraction = 0.0
+
+    # Parse the year and day integer
+    # TLE standard uses 2 digits for the year (first 2 characters)
+    year_two_digits = int(year_and_day[:2])
+    day_of_year = int(year_and_day[2:])
+    
+    # Standard NORAD 2-digit year rollover rule (Year 57-99 = 1900s, 00-56 = 2000s)
+    if year_two_digits >= 57:
+        year = 1900 + year_two_digits
+    else:
+        year = 2000 + year_two_digits
+        
+    # Step 1: Establish the base starting point of the year (January 1st at 00:00:00)
+    base_date = datetime(year, 1, 1, tzinfo=timezone.utc)
+    
+    # Step 2: Add the days. Because Jan 1st is day "1", we add (day_of_year - 1)
+    day_delta = timedelta(days=day_of_year - 1)
+    
+    # Step 3: Convert the remaining decimal fraction into exact microseconds
+    # 1 full day = 86,400 seconds = 86,400,000,000 microseconds
+    microseconds = round(fraction * 86_400_000_000)
+    fraction_delta = timedelta(microseconds=microseconds)
+    
+    # Combine everything to get the synchronized timestamp
+    exact_utc_time = base_date + day_delta + fraction_delta
+    return exact_utc_time
 
 # ==========================================
 # 1. CORE COORDINATE MATH ENGINES
@@ -77,15 +128,15 @@ def run_propagation(sat_record, start_time, end_time, step_seconds=60):
     """
     path_points = []
     # Flush timing bounds cleanly down to structural second boundaries
-    current_time = start_time.replace(microsecond=0)
-    final_time = end_time.replace(microsecond=0)
+    current_time = start_time
+    final_time = end_time
     
     total_steps = int((final_time - current_time).total_seconds() / step_seconds) + 1
     
     with tqdm(total=total_steps, desc="🛰️ Propagating Track Orbit") as pbar:
         while current_time <= final_time:
             jd, fr = jday(current_time.year, current_time.month, current_time.day, 
-                          current_time.hour, current_time.minute, current_time.second)
+                          current_time.hour, current_time.minute, current_time.second+ current_time.microsecond / 1_000_000 )
             
             error_code, r_eci, v_eci = sat_record.sgp4(jd, fr)
             
@@ -118,30 +169,28 @@ def run_propagation(sat_record, start_time, end_time, step_seconds=60):
     return pd.DataFrame(path_points)
 
 # ==========================================
-# 4. CONFIGURATION EXECUTIVE MODES
+# RUN 1: 3-DAY TIMELINE EXECUTIVE
 # ==========================================
-
 if __name__ == '__main__':
     os.makedirs("data", exist_ok=True)
     
     print("🔵 Running AFR-1 12-Hour Synchronized TLE Matrix...")
+    tle1 = "1 56964U 23084AJ  26161.62044538  .00004039  00000-0  14830-3 0  9990"
+    tle2 = "2 56964  97.6260 298.1542 0010550  10.4977 349.6480 15.28499881166228"
+
+    start_time = datetime(2026, 6, 11, 0, 0, 0)
+    end_time = datetime(2026, 6, 11, 12, 0, 0)
     
-    # 1. Use the direct raw TLE format to eliminate OMM floating-point math errors
-    line1 = "1 56964U 23084AJ  26161.22765219  .00004112  00000-0  15094-3 0  9997"
-    line2 = "2 56964  97.6260 297.7521 0010593  11.8097 348.3389 15.28496820166162"
-    
-    sat_object = init_from_tle(line1, line2)
+    #
+    sat_object = init_from_tle(tle1, tle2)
     
     # 2. MATCH THE EXACT TIME INHERENT IN THE TLE Snap-shot (Including microseconds!)
-    # Day fraction 0.22765219 translates precisely to 05:27:49 and 149222 microseconds
-    start = datetime(2026, 6, 10, 5, 27, 49, 149222, tzinfo=timezone.utc)
+ 
     
-    # 3. Project the requested 12-hour corridor
-    end = start + timedelta(hours=12)
-    output_file = "data/afr12_path.csv"
+    output_file = "data/afrtry.csv"
     interval_seconds = 60
     
     # --- Execute and Save ---
-    df_result = run_propagation(sat_object, start, end, step_seconds=interval_seconds)
+    df_result = run_propagation(sat_object, start_time, end_time, step_seconds=interval_seconds)
     df_result.to_csv(output_file, index=False)
     print(f"💾 Calculations successfully compiled and exported to 👉 {output_file}\n")
